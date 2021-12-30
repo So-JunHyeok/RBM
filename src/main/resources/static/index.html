@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<style>
+    
+
+   body{ margin: 0;  font-family :}
+  .warp{background-color: white; width: 100%; height: 100%;}
+  .header{background-color: black; width: 100%; height: 90px;}
+  .contents{padding: 50px;}
+  .area{height: 100%; padding-top: 25px; margin-left: 20px;}
+  .area h2 {color: white; margin: 0;}
+  .top{height: 100px;}
+  .searchBox{width: 50%; height: 50px; float: left; padding-left: 10px; padding-top: 5px;}
+
+  #searchType{
+      width: 100px;
+      background-color: black;
+      color: white;
+      height: 40px;
+      border-radius: 10px;
+      border: 1px solid black;
+  }
+  
+  .selectBox{width: 50%; height: 50px; float: right;}
+  .selectBox select{float: right; height: 35px; margin-left: 10px; width: 100px; border-radius: 5px;}
+  #searchKeyword{
+    background-color: black;
+    border: none;
+    height: 40px;
+    width: 440px;
+    padding-left: 50px;
+    font-size: 15px;
+    color: white;
+    border-radius: 15px;
+    background-image: url(img.png);
+    background-size: 40px;
+    background-position: 5px center;
+    background-repeat: no-repeat;
+  }
+  table{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-top: #313236 2px solid;
+    color: #53728b;
+    margin: 0 0 20px 0;
+    text-align: center;
+    border-top: 1px solid #959595 !important;
+    border-collapse: collapse;
+  }
+  thead{
+    width: 100%;
+    color: #222;
+    background: #eeeff0;
+  }
+
+ th{
+    color: #222;
+    font-size: 15px !important;
+    font-weight: 400 !important;
+    background-color: #fcfcfc;
+    border: 1px solid #e1e3e4 !Important;
+    height: 40px;
+ }
+
+  td{
+    text-align: center;
+    vertical-align: middle;
+    padding: 8px;
+    border: 1px solid #e1e3e4 !Important;
+  }
+  
+ .btns{
+    display: inline-block;
+    padding: 6px 20px;
+    vertical-align: top;
+    font-size: 14px;
+    letter-spacing: -0.025em;
+    line-height: 20px;
+ }
+
+#popupbackground{
+    display: none;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: Rgba(0,0,0,0.4);
+    z-index: 999;
+}
+
+.popup{
+    position: fixed;
+    left: 0%;
+    top: 0%;
+    display: none;
+    width: 598px;
+    max-height: 100vh;
+    border-radius: 10px;
+    box-sizing: border-box;
+    overflow-y: auto;
+    z-index: 1000;
+}
+.popup.large {
+    width: 800px;
+    max-width: 95%;
+}
+
+.popup .desc_box {
+    padding: 25px;
+    box-sizing: border-box;
+    background: #fff;
+    border: 3px solid #fde303;
+    border-top: 0;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+
+.popup .tit_box {
+    padding: 2px 25px;
+    box-sizing: border-box;
+    background: #fde303;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.tit_box p{
+    margin-bottom: 0;
+}
+
+textarea{
+    border: 1px solid #e1e3e4 !Important;
+}
+
+.programPage {
+
+    margin-top: 20px;
+    text-align: center;
+    font-size: 0px;
+}
+
+.programPage a.active{
+    color: #f48221;
+    font-weight: bold;
+}
+.programPage a {
+   position: relative;
+   display: inline-block;
+   vertical-aligN: middle;
+   padding: 10px;
+   margin: 0 5px;
+   font-size: 14px;
+   color: #444444;
+   letter-spacing: -0.045em;
+}
+
+   .writeText{
+       width: 95%;
+       height: 95%;
+       border: 1px solid #e1e3e4 !Important;
+   }
+
+   .writeSelect{
+       width: 95%;
+       height: 95%;
+       border: 1px solid #e1e3e4 !Important;
+   }
+
+
+</style>
+
+<script>
+function writepopup(){
+    var x = document.getElementById("popupbackground");
+    var p = document.getElementById("popup");
+    x.style.display = "block";
+    p.style.display = "block";
+}
+
+</script>
+    <script type="text/javascript">
+        $("#searchKeyword").on("keyup",function(key){
+            if(key.keyCode==13) {
+                go_submit();
+            }
+        });
+    </script>
+
+
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="/js/common/Criteria.js"></script>
+</head>
+<body>
+    <div class="warp">
+        <div class="header">
+            <div class="area">
+                <h2>Project name</h2>
+            </div>
+        </div>
+
+        <div class="contents">
+            <form id="searchForm" name="searchForm" action="/" method="get">
+                <div class="top">
+                    <div class="searchBox">
+                        <select name="searchType" id="searchType">
+                            <option  value="All">전체</option>
+                            <option  value="Nicname">닉네임</option>
+                            <option  value="Cell">연락처</option>
+                            <option  value="Uniq">특이사항</option>
+                        </select>
+                        <input type="text" id="searchKeyword" name="searchKeyword">
+                        <a class="btns" style="float: right; background-color: black !important; color: white; border-radius: 10px; margin-top: 2px; padding: 10px 20px;" href="javascript:;" onclick="go_submit()"><img src="/img/search_btn_icon.png" alt="">검색</a>
+                    </div>
+
+                    <div class="selectBox">
+
+
+                        <select name="filterType" id="filterType" onchange="go_submit()">
+                            <option value="">형태</option>
+                            <option value="Monthly">월세</option>
+                            <option value="Charter">전세</option>
+                            <option value="Trading">매매</option>
+                        </select>
+                    </div>
+                </div>
+            </form>
+
+            <div class="center">
+
+                <table>
+                    <colgroup>
+                        <col width="2%">
+                        <col width="5%">
+                        <col width="10%">
+                        <col width="10%">
+                        <col width="5%">
+                        <col width="5%">
+                        <col width="">
+                        <col width="5%">
+
+                    
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox"></th>
+                            <th>번호</th>
+                            <th>닉네임</th>
+                            <th>연락처</th>
+                            <th>성별</th>
+                            <th>나이</th>
+                            <th>특이사항</th>
+                            <th>방문형태</th>
+
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr >
+                            <td><input type="checkbox"></td>
+                            <td>1</td>
+                            <td >1</td>
+                            <td >1</td>
+                            <td >1</td>
+                            <td >1</td>
+                            <td >1</td>
+                            <td >1</td>
+
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="bottom" style="display: flex;">
+                <div class="delete" style="width: 50%;">
+                    <a class="btns" style="background-color: #fde303 !important; color: black;">삭제</a>
+                </div>
+
+                <div class="enrollment" style="float: right; width: 50%;">
+                    <a style="float: right; background-color: black !important; color: white;" class="btns" onclick="writepopup()">등록</a>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <div id="popupbackground"></div>
+    <div id="popup" class="popup large type04 popup_enrollAdd">
+        <form id="application" name="application" method="post" action="/mypage/teacher/process_application.jsp">
+            <input type="hidden" id="acmd" name="cmd" value="write">
+            <input type="hidden" id="ano" name="no" value="11">
+            <div class="box">
+                <div class="tit_box">
+                    <p>고객등록</p>
+                    <a href="javascript:;" class="x_btn"><img src="/img/student_close_btn.png" alt=""></a>
+                </div>
+                <div class="desc_box">
+
+                    <div class="table_desc_txt">
+                        <p>필수정보</p>
+                    </div>
+                    <div class="table_type02 table_block small_padding">
+                        <table>
+                            <colgroup>
+                                <col width="17%">
+                                <col width="33%">
+                                <col width="17%">
+                                <col width="33%">
+                            </colgroup>
+                            <tbody >
+                            <tr>
+                                <th>닉네임</th>
+                                <td class="text_left">
+                                    <input class="writeText" type="text" id="" name="C_Name">
+                                </td>
+                                <th>나이</th>
+                                <td class="text_left">
+                                    <input class="writeText" type="number" id="" name="C_Age">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>연락처</th>
+                                <td class="text_left">
+                                    <input class="writeText" type="text" id="" name="C_Tel">
+                                </td>
+                                <th>방문형태</th>
+                                <td class="text_left">
+                                    <select class="writeSelect">
+                                        <option value=""></option>
+                                        <option value=""></option>
+                                        <option value=""></option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>성별</th>
+                                <td class="text_left" colspan="3" >
+                                    <input type="radio" id="man" name="C_Gender" value="0"><label for="man">남자</label>
+                                    <input type="radio" id="woman" name="C_Gender" value="1"><label for="woman">여자</label>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th>특이사항</th>
+                                <td class="text_left" colspan="3">
+                                    <textarea name="C_Content" id="C_Content" rows="8" cols="80"></textarea>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!--
+					<div class="table_desc_txt">
+						<p>부가 정보</p>
+					</div>
+					<div class="table_type02 table_block small_padding">
+						<table>
+							<colgroup>
+								<col width="17%">
+								<col width="33%">
+								<col width="17%">
+								<col width="33%">
+							</colgroup>
+							<tbody>
+
+								<tr>
+									<th>1차방문기록</th>
+									<td class="text_left" colspan="3">
+										<textarea name="notes" id="notes" rows="8" cols="80"></textarea>
+									</td>
+								</tr>
+
+							</tbody>
+						</table>
+					</div>
+                    -->
+                    <div class="btn_box">
+                        <a class="btns" style="background-color: #fde303 !important; color: black;">취소</a>
+                        <a style="float: right; background-color: black !important; color: white;" class="btns" onclick="writepopup()">등록</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+
+</body>
+</html>

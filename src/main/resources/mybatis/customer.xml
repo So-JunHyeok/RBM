@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.relay.management.customer.CustomerMapper">
+
+    <select id="findByCustomerList" resultType="com.relay.management.customer.CustomerDTO" parameterType="com.relay.management.customer.CustomerDTO">
+
+        SELECT * FROM Customer_List
+
+        <where>
+            <if test="searchKeyword != ''">
+                <if test="searchType == 'All'">
+                AND (C_Name like CONCAT('%',#{searchKeyword},'%') OR C_Tel like CONCAT('%',#{searchKeyword},'%')OR C_Content like CONCAT('%',#{searchKeyword},'%'))
+                </if>
+                <if test="searchType == 'Nicname'">AND  C_Name like CONCAT('%',#{searchKeyword},'%')</if>
+                <if test="searchType == 'Cell'">AND  C_Tel like CONCAT('%',#{searchKeyword},'%')</if>
+                <if test="searchType == 'Uniq'">AND  C_Content like CONCAT('%',#{searchKeyword},'%')</if>
+            </if>
+
+            <if test="filterType != ''">
+                <if test="filterType == 'Monthly'">AND C_Form like CONCAT('%','월세','%')</if>
+                <if test="filterType == 'Charter'">AND C_Form like CONCAT('%','전세','%')</if>
+                <if test="filterType == 'Trading'">AND C_Form like CONCAT('%','매매','%')</if>
+            </if>
+
+        </where>
+
+        ORDER BY C_Num desc
+        LIMIT #{startRow}, #{rowSize}
+
+    </select>
+
+    <select id="findByCustomerCount" resultType="integer" parameterType="com.relay.management.customer.CustomerDTO">
+        SELECT COUNT(*) FROM Customer_List
+        <where>
+            <if test="searchKeyword != ''">
+                <if test="searchType == 'All'">
+                    AND (C_Name like CONCAT('%',#{searchKeyword},'%') OR C_Tel like CONCAT('%',#{searchKeyword},'%')OR C_Content like CONCAT('%',#{searchKeyword},'%'))
+                </if>
+                <if test="searchType == 'Nicname'">AND  C_Name like CONCAT('%',#{searchKeyword},'%')</if>
+                <if test="searchType == 'Cell'">AND  C_Tel like CONCAT('%',#{searchKeyword},'%')</if>
+                <if test="searchType == 'Uniq'">AND  C_Content like CONCAT('%',#{searchKeyword},'%')</if>
+            </if>
+
+            <if test="filterType != ''">
+                <if test="filterType == 'Monthly'">AND C_Form like CONCAT('%','월세','%')</if>
+                <if test="filterType == 'Charter'">AND C_Form like CONCAT('%','전세','%')</if>
+                <if test="filterType == 'Trading'">AND C_Form like CONCAT('%','매매','%')</if>
+            </if>
+
+        </where>
+    </select>
+
+
+    <insert id="insertInCustomer" parameterType="com.relay.management.customer.CustomerDTO">
+        INSERT INTO Customer_List
+            ( C_Name
+            , C_Gender
+            , C_Age
+            , C_Tel
+            , C_Content
+            , C_Form
+            )VALUES
+            (#{C_Name}
+            , #{C_Gender}
+            , #{C_Age}
+            , #{C_Tel}
+            , #{C_Content}
+            , #{C_Form}
+            )
+    </insert>
+
+    <delete id="deleteInCustomer" parameterType="integer">
+        DELETE FROM Customer_List
+        WHERE C_Num = #{C_Num}
+    </delete>
+</mapper>
